@@ -5,6 +5,7 @@ import com.learning.employeescatalog.entity.Employee;
 import com.learning.employeescatalog.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,4 +25,14 @@ public class EmployeeRestController {
         return employeeService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Employee getById(@PathVariable int id) {
+        Employee employee = employeeService.findById(id);
+
+        if (employee == null) {
+            throw new RuntimeException("Employee id not found - " + id);
+        }
+
+        return employee;
+    }
 }
