@@ -38,6 +38,7 @@ public class EmployeeDAOHibernateImpl implements EmployeeDAO {
     public void deleteById(int id) {
          Query query = getSession().createQuery("delete from Employee where id=:id");
          query.setParameter("id", id);
+         query.executeUpdate();
     }
 
     private Session getSession() {
