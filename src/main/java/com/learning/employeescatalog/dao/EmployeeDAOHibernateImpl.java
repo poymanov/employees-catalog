@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -20,11 +19,28 @@ public class EmployeeDAOHibernateImpl implements EmployeeDAO {
     }
 
     @Override
-    @Transactional
     public List<Employee> findAll() {
-        Session currentSession = entityManager.unwrap(Session.class);
-        Query<Employee> query = currentSession.createQuery("from Employee", Employee.class);
-
+        Query<Employee> query = getSession().createQuery("from Employee", Employee.class);
         return query.getResultList();
+    }
+
+    @Override
+    public Employee findById(int id) {
+        return getSession().get(Employee.class, id);
+    }
+
+    @Override
+    public void save(Employee employee) {
+        getSession().saveOrUpdate(employee);
+    }
+
+    @Override
+    public void deleteById(int id) {
+         Query query = getSession().createQuery("delete from Employee where id=:id");
+         query.setParameter("id", id);
+    }
+
+    private Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 }
